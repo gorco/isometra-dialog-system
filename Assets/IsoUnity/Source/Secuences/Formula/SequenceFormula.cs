@@ -115,7 +115,7 @@ public class SequenceFormula {
                 }
 
                 break;
-            case "objectVar":
+            case "varObject":
                 {
                     object o = Sequence.current.GetObject((string)args.Parameters[0].Evaluate());
                     PropertyInfo p = null;
