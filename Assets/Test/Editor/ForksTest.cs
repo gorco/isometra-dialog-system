@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 using Isometra;
@@ -70,7 +69,6 @@ public class ForksTest {
 
     // A UnityTest behaves like a coroutine in PlayMode
     // and allows you to yield null to skip a frame in EditMode
-    [UnityTest]
 	public IEnumerator ForksTestWithEnumeratorPasses() {
 		// Use the Assert class to test conditions.
 		// yield to skip a frame
