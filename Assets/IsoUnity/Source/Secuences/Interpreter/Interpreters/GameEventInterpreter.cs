@@ -40,8 +40,12 @@ namespace Isometra.Sequences {
 		private IGameEvent ge;
 		public void Tick()
 		{
-			ge = (node.Content as IGameEvent);
+			ge = (node.Content as IGameEvent).Clone() as IGameEvent;
 			if(!launched){
+				foreach(var param in ge.Params)
+					if(ge.getParameter(param) is string)
+						ge.setParameter(param, SequenceFormula.ParseFormulas(ge.getParameter(param) as string));
+
 				Game.main.enqueueEvent(ge);
 				if(ge.getParameter("synchronous")!=null && (bool)ge.getParameter("synchronous") == true)
 					waitTillEventFinished = true;

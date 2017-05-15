@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using NCalc;
 using System.Reflection;
+using System;
+using System.Text.RegularExpressions;
 
 namespace Isometra.Sequences {
 	public class SequenceFormula {
@@ -214,8 +216,42 @@ namespace Isometra.Sequences {
 
 	    public object Evaluate()
 	    {
-	        return expression.Evaluate();
+			try
+			{
+				return expression.Evaluate();
+			} catch (Exception e)
+			{
+				Debug.LogWarning(e.ToString());
+				return false;	
+			}
+	        
 	    }
+
+		// UTILITY
+		public static string ParseFormulas(string toParse)
+		{
+			if (toParse == null || toParse == string.Empty)
+				return toParse;
+			try
+			{
+				toParse = Regex.Replace(toParse, @"\<\$(.+)\$\>", m => {
+					var formula = new SequenceFormula(m.Groups[1].Value);
+					var evalresult = formula.Evaluate();
+					return formula.IsValidExpression ? evalresult != null ? evalresult.ToString() : "(null: " + m.Groups[1].Value + ")" : formula.Error;
+				}, RegexOptions.Multiline);
+				toParse = Regex.Replace(toParse, @"\$(\w+)", m => {
+					var formula = new SequenceFormula(m.Groups[1].Value);
+					return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
+				}, RegexOptions.Multiline);
+
+			}
+			catch (FormulaException fe)
+			{
+				Debug.LogError("Error parsing: " + toParse + " \n " + fe.Message);
+			}
+			return toParse;
+		}
+
 	}
 
 	public class FormulaException : System.Exception
@@ -226,4 +262,5 @@ namespace Isometra.Sequences {
 	    }
 
 	}
+
 }

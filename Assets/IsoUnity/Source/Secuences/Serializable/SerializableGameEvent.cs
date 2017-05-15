@@ -66,12 +66,14 @@ namespace Isometra {
 
 	                if (c == null)
 	                    c = content;
-					else if(Application.isEditor && !Application.isPlaying
-                        && (UnityEditor.AssetDatabase.IsMainAsset(this) || UnityEditor.AssetDatabase.IsSubAsset(this)))
+					else if(Application.isEditor && !Application.isPlaying)
                     {
 						#if UNITY_EDITOR
-	                    (c as ScriptableObject).hideFlags = HideFlags.HideInHierarchy;
-	                    UnityEditor.AssetDatabase.AddObjectToAsset(c as Object, this);
+						if(UnityEditor.AssetDatabase.IsMainAsset(this) || UnityEditor.AssetDatabase.IsSubAsset(this))
+						{
+							(c as ScriptableObject).hideFlags = HideFlags.HideInHierarchy;
+							UnityEditor.AssetDatabase.AddObjectToAsset(c as Object, this);
+						}
 						#endif
 	                }
 
@@ -235,6 +237,17 @@ namespace Isometra {
 				JSONAble unserialized = JSONSerializer.UnSerialize(param);
 				this.setParameter(key, unserialized);
 			}
+		}
+
+		public object Clone()
+		{
+			var clone = this.MemberwiseClone() as SerializableGameEvent;
+
+			clone.args = new Dictionary<string, Object>();
+			foreach (var param in this.Params)
+				clone.setParameter(param, this.getParameter(param));
+
+			return clone;
 		}
 	}
 }

@@ -23,6 +23,8 @@ public class CustomDialogManager : DialogEventManager {
     public CanvasGroup optionsGroup;
     public LayoutGroup optionsHolder;
     public GameObject optionPrefab;
+    public CharacterCuller faceCamera;
+    public Image face;
 
     // Private variables
     private State state = State.Idle;
@@ -34,7 +36,6 @@ public class CustomDialogManager : DialogEventManager {
     private string msg = "";
     private CanvasGroup managingGroup;
     private Option optionSelected;
-
 
     void Start()
     {
@@ -56,11 +57,14 @@ public class CustomDialogManager : DialogEventManager {
         managingGroup.gameObject.SetActive(true);
         interactionBlocker.SetActive(true);
 
-        if (frg.Character != "" && frg.Parameter != "")
+        if (frg.Character != "")
         {
-            GameObject.Find(frg.Character).SendMessage(frg.Parameter);
+            faceCamera.character = GameObject.Find(frg.Character);
         }
+
+        face.rectTransform.offsetMax = new Vector2(faceCamera.character ? face.rectTransform.rect.height : 0, face.rectTransform.offsetMax.y);
     }
+
 
     protected override void DoOptions(string question, List<Option> options)
     {
@@ -78,6 +82,7 @@ public class CustomDialogManager : DialogEventManager {
             // create the options
             var option = GameObject.Instantiate(optionPrefab);
             option.transform.SetParent(optionsHolder.transform);
+			option.transform.localScale = Vector3.one;
             var text = option.transform.GetChild(0).GetComponent<Text>().text = o.Text;
             option.GetComponent<Button>().onClick.AddListener(() => {
                 optionSelected = opt.Find(e => e.Text == text);
@@ -136,6 +141,7 @@ public class CustomDialogManager : DialogEventManager {
                 managingGroup.alpha = Mathf.Clamp01(managingGroup.alpha - Time.deltaTime / fadeTime);
                 if (managingGroup.alpha == 0)
                 {
+                    faceCamera.character = null;
                     managingGroup.gameObject.SetActive(false);
                     interactionBlocker.SetActive(false);
                     state = State.Idle;
@@ -147,6 +153,11 @@ public class CustomDialogManager : DialogEventManager {
                 break;
             case State.Idle:
                 break;
+        }
+
+        if (face.isActiveAndEnabled)
+        {
+            textHolder.rectTransform.offsetMin = new Vector2(face.rectTransform.offsetMax.x + 20, 20);
         }
     }
 

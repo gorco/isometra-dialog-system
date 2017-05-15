@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 namespace Isometra {
-	public interface IGameEvent : JSONAble {
+	public interface IGameEvent : JSONAble, ICloneable {
 
 		string Name {
 			get; set;

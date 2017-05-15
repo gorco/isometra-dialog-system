@@ -75,10 +75,10 @@ namespace Isometra.Sequences {
 	                    var nextFragment = fragments.Dequeue().Clone();
 
 	                    // Parse the formulas
-	                    nextFragment.Name = ParseFormulas(nextFragment.Name);
-	                    nextFragment.Parameter = ParseFormulas(nextFragment.Parameter);
-	                    nextFragment.Character = ParseFormulas(nextFragment.Character);
-	                    nextFragment.Msg = ParseFormulas(nextFragment.Msg);
+	                    nextFragment.Name = SequenceFormula.ParseFormulas(nextFragment.Name);
+	                    nextFragment.Parameter = SequenceFormula.ParseFormulas(nextFragment.Parameter);
+	                    nextFragment.Character = SequenceFormula.ParseFormulas(nextFragment.Character);
+	                    nextFragment.Msg = SequenceFormula.ParseFormulas(nextFragment.Msg);
 
 	                    var ge = new GameEvent();
 	                    ge.name = "show dialog fragment";
@@ -107,9 +107,9 @@ namespace Isometra.Sequences {
 	                launchedOptionsList = optionsList.FindAll(o => o.Fork == null || o.Fork.check());
 
 	                // Parse the formulas
-	                options.Question = ParseFormulas(options.Question);
-	                launchedOptionsList.ForEach(o => o.Parameter = ParseFormulas(o.Parameter));
-	                launchedOptionsList.ForEach(o => o.Text = ParseFormulas(o.Text));
+	                options.Question = SequenceFormula.ParseFormulas(options.Question);
+	                launchedOptionsList.ForEach(o => o.Parameter = SequenceFormula.ParseFormulas(o.Parameter));
+	                launchedOptionsList.ForEach(o => o.Text = SequenceFormula.ParseFormulas(o.Text));
 
 	                ge.setParameter("options", launchedOptionsList);
 	                ge.setParameter("message", options.Question);
@@ -128,28 +128,6 @@ namespace Isometra.Sequences {
 				chosen = -1;
 			}
 		}
-
-	    private string ParseFormulas(string toParse)
-	    {
-	        if (toParse == null || toParse == string.Empty)
-	            return toParse;
-	        try
-	        {
-	        toParse = Regex.Replace(toParse, @"\<\$(.+)\$\>", m => {
-	            var formula = new SequenceFormula(m.Groups[1].Value);
-	            return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
-	        }, RegexOptions.Multiline);
-	        toParse = Regex.Replace(toParse, @"\$(\w+)", m => {
-	            var formula = new SequenceFormula(m.Groups[1].Value);
-	            return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
-	        }, RegexOptions.Multiline);
-
-	        }catch(FormulaException fe)
-	        {
-	            Debug.LogError("Error parsing: " + toParse + " \n " + fe.Message);
-	        }
-	        return toParse;
-	    }
 
 		public ISequenceInterpreter Clone(){
 			return ScriptableObject.CreateInstance<DialogInterpreter>();

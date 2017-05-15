@@ -249,6 +249,17 @@ namespace Isometra {
 	            this.setParameter(key, unserialized);
 	        }
 	    }
+
+		public object Clone()
+		{
+			var clone = this.MemberwiseClone() as GameEvent;
+
+			clone.args = new Dictionary<string, object>();
+			foreach (var param in this.Params)
+				clone.setParameter(param, this.getParameter(param));
+
+			return clone;
+		}
 	}
 
 }
