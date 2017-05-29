@@ -111,7 +111,8 @@ namespace Isometra.Sequences {
 	                launchedOptionsList.ForEach(o => o.Parameter = SequenceFormula.ParseFormulas(o.Parameter));
 	                launchedOptionsList.ForEach(o => o.Text = SequenceFormula.ParseFormulas(o.Text));
 
-	                ge.setParameter("options", launchedOptionsList);
+					ge.setParameter("name", options.name);
+					ge.setParameter("options", launchedOptionsList);
 	                ge.setParameter("message", options.Question);
 	                ge.setParameter("launcher", this);
 	                ge.setParameter("synchronous", true);
