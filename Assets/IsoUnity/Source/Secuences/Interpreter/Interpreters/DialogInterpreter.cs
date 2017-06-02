@@ -114,6 +114,7 @@ namespace Isometra.Sequences {
 					ge.setParameter("name", options.name);
 					ge.setParameter("options", launchedOptionsList);
 	                ge.setParameter("message", options.Question);
+					ge.setParameter("questionID", options.QuestionID);
 	                ge.setParameter("launcher", this);
 	                ge.setParameter("synchronous", true);
 	                eventLaunched = ge;

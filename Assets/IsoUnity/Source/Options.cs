@@ -28,7 +28,9 @@ namespace Isometra.Sequences {
 	    
 	    public string Question { get; set; }
 
-	    public List<Option> Values
+		public string QuestionID { get; set; }
+
+		public List<Option> Values
 	    {
 	        get
 	        {
@@ -75,6 +77,7 @@ namespace Isometra.Sequences {
 	        var r = this.MemberwiseClone() as Options;
 	        
 	        r.Question = this.Question;
+			r.QuestionID = this.QuestionID;
 	        r.options = options.ConvertAll(o => o.Clone() as Option);
 
 	        return r;
