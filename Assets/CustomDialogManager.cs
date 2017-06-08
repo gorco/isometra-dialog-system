@@ -4,6 +4,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using Isometra.Sequences;
+using Isometra;
 
 public class CustomDialogManager : DialogEventManager {
 
@@ -161,6 +162,11 @@ public class CustomDialogManager : DialogEventManager {
         }
     }
 
+	void OnDestroy()
+	{
+		Game.main.enqueueEvent(new GameEvent("abort sequence"));
+		//Debug.LogError("Dialog destroyed");
+	}
 
     private void UpdateText()
     {

@@ -13,6 +13,11 @@ namespace Isometra.Sequences {
 			if(ev.Name.ToLower() == "start sequence"){
 				sequenceQueue.Enqueue(ev);
 			}
+			else if (ev.Name.ToLower() == "abort sequence")
+			{
+				sequenceInterpreter = null;
+				sequenceQueue.Clear();
+			}
 			if (sequenceInterpreter != null)
 				sequenceInterpreter.EventHappened(ev);
 		}
