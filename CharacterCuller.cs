@@ -16,7 +16,7 @@ public class CharacterCuller : MonoBehaviour {
             var point = bounds.center + new Vector3(0, bounds.extents.y * .66f);
 
             Camera.current.transform.position = point - Vector3.forward;
-            Camera.current.orthographicSize = bounds.size.x / 2f;
+            Camera.current.orthographicSize = (bounds.size.x / 2f) * 1.25f;
 			characterLayer.Add(character, character.layer);
 			character.layer = character.layer | LayerMask.NameToLayer("Dialog");
 			foreach (var child in character.GetComponentsInChildren<Renderer>())

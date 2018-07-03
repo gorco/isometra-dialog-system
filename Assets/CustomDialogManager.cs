@@ -63,7 +63,7 @@ public class CustomDialogManager : DialogEventManager {
             faceCamera.character = GameObject.Find(frg.Character);
         }
 
-        face.rectTransform.offsetMax = new Vector2(faceCamera.character ? face.rectTransform.rect.height : 0, face.rectTransform.offsetMax.y);
+        face.rectTransform.offsetMax = new Vector2(faceCamera.character ? face.rectTransform.rect.height : 40, face.rectTransform.offsetMax.y);
     }
 
 
